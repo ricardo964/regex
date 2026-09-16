@@ -299,6 +299,45 @@ public:
 
         return visited;
     }
+
+    bool eval(std::string plaintext)
+    {
+        std::set<int> current_states;
+
+        current_states = this->eclosures(this->start_state);
+        for (char c : plaintext)
+        {
+            std::set<int> temp;
+            for (int state : current_states)
+            {
+                for (int next_state : this->move(state, c))
+                    temp.insert(next_state);
+
+                for (int e_state : this->eclosures(state))
+                {
+                    for (int next_state : this->move(e_state, c))
+                        temp.insert(next_state);
+                }
+            }
+
+            current_states = temp;
+        }
+
+        std::set<int> temp;
+        for (int state : current_states)
+        {
+            for (int e_state : this->eclosures(state))
+                temp.insert(e_state);
+        }
+
+        for (int state : temp)
+            current_states.insert(state);
+
+        if (current_states.find(this->end_state) == current_states.end())
+            return false;
+        else
+            return true;
+    }
 };
 
 ENonDeterministicFiniteAutomata build(std::queue<Token> queue)
