@@ -1,5 +1,5 @@
 CC=g++
-SOURCE=lexer.cpp
+SOURCE=lexer.cpp automata.cpp main.cpp parser.cpp
 TARGET=bin
 
 _start:
